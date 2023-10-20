@@ -38,3 +38,11 @@ def edit_category(category_id):
     # 1st category is the variable used in the edit category template
     # 2nd category is the variable defined above
     return render_template("edit_category.html", category=category)
+
+
+@app.route("/delete_category/<int:category_id>")
+def delete_category(category_id):
+    category = Category.query.get_or_404(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    return redirect(url_for("categories"))
