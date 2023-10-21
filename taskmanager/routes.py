@@ -10,6 +10,7 @@ def home():
 
 @app.route("/categories")
 def categories():
+    # creates a list of all current categories
     categories = list(Category.query.order_by(Category.category_name).all())
     # 1st categories is the variable name we can use in our html file
     # 2nd catagories is the list of the variable defined above
@@ -46,3 +47,23 @@ def delete_category(category_id):
     db.session.delete(category)
     db.session.commit()
     return redirect(url_for("categories"))
+
+
+@app.route("/add_task", methods=["GET", "POST"])
+def add_task():
+    categories = list(Category.query.order_by(Category.category_name).all())
+    if request.method == "POST":
+        task = Task(
+            task_name=request.form.get("task_name"),
+            task_description=request.form.get("task_description"),
+            is_urgent=bool(True if request.form.get("is_urgent") else False),
+            due_date=request.form.get("due_date"),
+            category_id=request.form.get("category_id")
+        )
+        db.session.add(task)
+        db.session.commit()
+        return redirect(url_for("home"))
+    # 1st category is the variable used in the add_task template.
+    # 2nd category is the list of categories retrieved from
+    # the database defined in the variable above.
+    return render_template("add_task.html", categories=categories)
