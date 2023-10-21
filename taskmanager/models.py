@@ -6,7 +6,8 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(25), unique=True, nullable=False)
     # linking our foreign key and cascade deletion
-    tasks = db.relationship("Task", backref="category", cascade="all, delete", lazy=True)
+    tasks = db.relationship(
+        "Task", backref="category", cascade="all, delete", lazy=True)
 
     def __repr__(self):
         # __repr__ to represent itself in the form of a string
@@ -25,7 +26,8 @@ class Task(db.Model):
     # ondelete="CASCADE" used for a one-to-many relationship
     # this means that One category can be applied to many different
     # tasks, but one task cannot have many categories.
-    category_id = db.Column(db.Integer, db.ForeignKey("category.id", ondelete="CASCADE"), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey(
+        "category.id", ondelete="CASCADE"), nullable=False)
 
     def __repr__(self):
         # __repr__ to represent itself in the form of a string
